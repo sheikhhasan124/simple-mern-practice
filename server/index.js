@@ -1,6 +1,9 @@
 const express = require('express')
+const cors = require('cors');
 const app = express()
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
+app.use(cors())
 
 const users = [
     {id:1, name:"alam",email:"alam@gmail.com"},
@@ -19,6 +22,7 @@ app.get('/about',(req,res)=>{
 app.get('/users',(req,res)=>{
     res.send(users)
 })
+// this is dynamic param
 app.get('/user/:id',(req,res)=>{
     const id = req.params.id;
     const user = users.find(u=>u.id==id)
