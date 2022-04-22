@@ -14,12 +14,20 @@ app.use(express.json())
 
 const uri = "mongodb+srv://user1:p2rei1USXT28JrGp@cluster0.gtyxm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  console.log('connect')
-  client.close();
-});
+
+async function run() {
+ try{
+    await client.connect()
+    const userCollection = client.db("foodExpress").collection("user");
+     const user = {name:'bablu', email:'bablu@gmail.com'}
+     const result = await userCollection.insertOne(user)
+     console.log(`user interted and id ${result.insertedId}`)
+ }
+ finally{
+    // await client.close() 
+ }
+} 
+run().catch(console.dir);
 
 
 app.get('/',(req,res)=>{
