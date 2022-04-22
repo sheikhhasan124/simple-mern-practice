@@ -28,7 +28,7 @@ const AddUser = () => {
             <form onSubmit={handleAdduser}>
                 <input type="text" name='name' placeholder='name' required/>
                 <input type="email" name="email" id="" placeholder='email' required />
-                <input type="submit" value="submit" />
+                <input type="submit" value="add user" />
             </form>
         </div>
     );
