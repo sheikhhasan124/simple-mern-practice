@@ -1,9 +1,10 @@
 const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 const cors = require('cors');
 const app = express()
-const PORT = 5000;
 
+const PORT = 5000;
 //middlewere 
 app.use(cors());
 app.use(express.json())
@@ -19,10 +20,28 @@ async function run() {
  try{
     await client.connect()
     const userCollection = client.db("foodExpress").collection("user");
-     const user = {name:'bablu', email:'bablu@gmail.com'}
-     const result = await userCollection.insertOne(user)
-     console.log(`user interted and id ${result.insertedId}`)
- }
+     // we will take data from client to server ,then server to database,,,,3 layer
+     // get user
+     app.get('/user',async(req,res)=>{
+         const query = {};
+         const cursor = userCollection.find(query);
+         const users = await cursor.toArray()
+         res.send(users)
+     })
+       // post user
+     app.post('/user', async(req,res)=>{
+         const newUser = req.body;
+           const result = await userCollection.insertOne(newUser);
+         res.send({result})
+     })
+     // delete a user
+     app.delete('/user/:id',async(req,res)=>{
+         const id = req.params.id;
+         const query= {_id:ObjectId(id)}
+         const result = await userCollection.deleteOne(query);
+         res.send(result)
+     })
+    }
  finally{
     // await client.close() 
  }
