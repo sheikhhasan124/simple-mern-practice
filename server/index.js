@@ -21,18 +21,28 @@ app.get('/',(req,res)=>{
 app.get('/about',(req,res)=>{
     res.send('hello from about')
 })
+// query
 app.get('/users',(req,res)=>{
-    res.send(users)
-})
+    if(req.query.name){
+        const search = req.query.name.toLowerCase();
+        const matched = users.filter(user=>user.name.toLowerCase().includes(search))
+        res.send(matched)
+    }else{
 
+        res.send(users)
+    }
+})
+// post route
 app.post('/user',(req,res)=>{
     console.log(req.body)
-    
-    res.send('successful')
+    const user = req.body;
+    user.id = users.length + 1;
+    users.push(user)
+    res.send(user)
 })
 // this is dynamic param
 app.get('/user/:id',(req,res)=>{
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const user = users.find(u=>u.id==id)
     res.send(user)
 })
