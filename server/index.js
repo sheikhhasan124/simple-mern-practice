@@ -1,52 +1,32 @@
-const express = require('express')
+const express = require('express');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
 const app = express()
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
-app.use(cors())
+//middlewere 
+app.use(cors());
 app.use(express.json())
 
+//name:user1
+//password:p2rei1USXT28JrGp
 
-const users = [
-    {id:1, name:"alam",email:"alam@gmail.com"},
-    {id:2, name:"blam",email:"alam@gmail.com"},
-    {id:3, name:"clam",email:"alam@gmail.com"},
-    {id:4, name:"dlam",email:"alam@gmail.com"},
-    {id:5, name:"elam",email:"alam@gmail.com"},
-]
+
+const uri = "mongodb+srv://user1:p2rei1USXT28JrGp@cluster0.gtyxm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  console.log('connect')
+  client.close();
+});
+
 
 app.get('/',(req,res)=>{
-    res.send('hello from home')
-})
-app.get('/about',(req,res)=>{
-    res.send('hello from about')
-})
-// query
-app.get('/users',(req,res)=>{
-    if(req.query.name){
-        const search = req.query.name.toLowerCase();
-        const matched = users.filter(user=>user.name.toLowerCase().includes(search))
-        res.send(matched)
-    }else{
-
-        res.send(users)
-    }
-})
-// post route
-app.post('/user',(req,res)=>{
-    console.log(req.body)
-    const user = req.body;
-    user.id = users.length + 1;
-    users.push(user)
-    res.send(user)
-})
-// this is dynamic param
-app.get('/user/:id',(req,res)=>{
-    const id = parseInt(req.params.id);
-    const user = users.find(u=>u.id==id)
-    res.send(user)
+    res.send('home page')
 })
 
 app.listen(PORT,()=>{
-    console.log(`server running at ${PORT}`)
+    console.log(`server is runnig at https//localhost
+    ${PORT}`)
 })
